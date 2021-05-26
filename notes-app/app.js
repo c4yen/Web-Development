@@ -8,19 +8,6 @@ yargs.version('1.1.0')
 
 //add, remove, read, list
 
-/**
- * Challenge Setup Command Option and functin
- * 1. Setup the remove command to take a required "--title" option
- * 2. Create and export a removeNote function from notes.js
- * 3. Call removeNote in remove command handler
- * 4. Have removeNote log the title of the note to be removed
- * 5. Test your work using: node app.js remove --title="some title"
- * 6. Load existing notes
- * 7. Use array filter method to remove the matching note (if any)
- * 8. Save your newly created array
- * 9. Test your work with a title that exists and a title that doesn't exist
- */
-
 //create add command
 yargs.command({
     command: 'add',
@@ -37,7 +24,7 @@ yargs.command({
             type: 'string'
         }
     },
-    handler: function(argv){
+    handler(argv){
         notes.addNotes(argv.title, argv.body)
     }
 })
@@ -53,7 +40,7 @@ yargs.command({
             type: 'string'
         }
     },
-    handler: function(argv){
+    handler(argv){
         notes.removeNotes(argv.title)
     }
 })
@@ -62,8 +49,8 @@ yargs.command({
 yargs.command({
     command: 'list',
     describe: 'List the notes',
-    handler: function(){
-        console.log('Lising the notes')
+    handler(){
+        notes.listNotes()
     }
 })
 
@@ -71,7 +58,7 @@ yargs.command({
 yargs.command({
     command: 'read',
     describe: 'Reading a note',
-    handler: function(){
+    handler(){
         console.log('Reading a note')
     }
 })

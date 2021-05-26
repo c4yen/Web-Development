@@ -1,15 +1,13 @@
 const fs = require('fs')
 const chalk = require('chalk')
 
-const getNotes = function (){
+const getNotes = () => {
     return 'Your notes...'
 }
 
-const addNote = function(title, body){
+const addNote = (title, body) => {
     const notes = loadNotes()
-    const duplicateNotes = notes.filter(function (notes) {
-        return notes.title === title
-    })
+    const duplicateNotes = notes.filter((notes) => notes.title === title)
 
     if (duplicateNotes.length === 0){
         notes.push({
@@ -20,18 +18,16 @@ const addNote = function(title, body){
         
         console.log(chalk.bgGreen("Notes added"))
     }else{
-        console.log(chalk.bgGRed("Notes title was taken"))
+        console.log(chalk.bgRed("Notes title was taken"))
     }
 
 }
 
-const removeNote = function(title){
+const removeNote = (title) => {
     const notes = loadNotes()
 
     // Find all elements except the element with our title
-    const UpdatedList = notes.filter(function(notes){
-        return notes.title !== title
-    })
+    const UpdatedList = notes.filter((notes) => notes.title !== title)
 
     if (notes.length > UpdatedList.length){
         saveNotes(UpdatedList)
@@ -42,12 +38,23 @@ const removeNote = function(title){
     
 }
 
-const saveNotes = function(notes){
+const listNotes = () => {
+    const notes = loadNotes()
+    console.log (chalk.red("Yo") + chalk.yellow("u") + chalk.green("r") + " " + chalk.blue("Notes") )
+    // for (var i = 0; i < notes.length; i++){
+    //     console.log(notes[i].title + ":" + notes[i].body)
+    // }
+    notes.forEach((notes) => {
+        console.log(notes.title)
+    })
+}
+
+const saveNotes = (notes) => {
     const dataJSON = JSON.stringify(notes)
     fs.writeFileSync('notes.json', dataJSON)
 }
 
-const loadNotes = function(){
+const loadNotes = () => {
     try{
         const dataBuffer = fs.readFileSync('notes.json')
         const dataJSON = dataBuffer.toString()
@@ -62,5 +69,6 @@ const loadNotes = function(){
 module.exports = {
     getNotes: getNotes,
     addNotes: addNote,
-    removeNotes: removeNote
+    removeNotes: removeNote,
+    listNotes: listNotes
 }
