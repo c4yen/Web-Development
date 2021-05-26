@@ -5,16 +5,20 @@ const { describe, demandOption } = require('yargs')
 //Customize yargs version
 yargs.version('1.1.0')
 
+//add, remove, read, list
 
 /**
- * Challenge: Add an option to yargs
- * 1. Setup a body option for the add command
- * 2. Config a description, make it requried, and for it to be a string
- * 3. Log the body value in the handler function
- * 4. Test your work!
+ * Challenge Setup Command Option and functin
+ * 1. Setup the remove command to take a required "--title" option
+ * 2. Create and export a removeNote function from notes.js
+ * 3. Call removeNote in remove command handler
+ * 4. Have removeNote log the title of the note to be removed
+ * 5. Test your work using: node app.js remove --title="some title"
+ * 6. Load existing notes
+ * 7. Use array filter method to remove the matching note (if any)
+ * 8. Save your newly created array
+ * 9. Test your work with a title that exists and a title that doesn't exist
  */
-
-//add, remove, read, list
 
 //create add command
 yargs.command({
@@ -41,8 +45,15 @@ yargs.command({
 yargs.command({
     command: 'remove',
     describe: 'Remove a note',
-    handler: function(){
-        console.log('Removing the note')
+    builder:{
+        title:{
+            describe: 'Note title to be removed',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: function(argv){
+        notes.removeNotes(argv.title)
     }
 })
 

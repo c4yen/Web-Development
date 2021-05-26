@@ -23,6 +23,23 @@ const addNote = function(title, body){
 
 }
 
+const removeNote = function(title){
+    const notes = loadNotes()
+
+    // Find all elements except the element with our title
+    const UpdatedList = notes.filter(function(notes){
+        return notes.title !== title
+    })
+
+    if (notes.length !== UpdatedList.length){
+        saveNotes(UpdatedList)
+        console.log("Notes " + title + " was removed.")
+    }else{
+        console.log("Notes " + title + " was not found.")
+    }
+    
+}
+
 const saveNotes = function(notes){
     const dataJSON = JSON.stringify(notes)
     fs.writeFileSync('notes.json', dataJSON)
@@ -42,5 +59,6 @@ const loadNotes = function(){
 
 module.exports = {
     getNotes: getNotes,
-    addNotes: addNote
+    addNotes: addNote,
+    removeNotes: removeNote
 }
