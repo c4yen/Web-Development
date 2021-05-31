@@ -16,6 +16,7 @@ body{
 
 .main-content{
     flex-grow: 1;
+    color: black;
 }
 
 footer{
@@ -28,6 +29,7 @@ footer{
 header{
     margin-top: 16px;
     margin-bottom: 48px;
+    color: black;
 }
 
 header a{
@@ -38,4 +40,21 @@ header a{
 
 .portrait{
     width: 500px;
+}
+
+p{
+    color:black;
+}
+
+input {
+    border: 1px solid #cccccc;
+    padding: 8px;
+}
+
+button {
+    cursor: pointer;
+    border: 1px solid #888888;
+    background: #888888;
+    color: white;
+    padding: 8px;
 }
