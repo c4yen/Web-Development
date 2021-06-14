@@ -18,51 +18,18 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
 
     const db = client.db(databaseName)
 
-    db.collection('users').findOne({ _id: new ObjectID("60c20221eaae2e6f9cff9505") }, (error, user)=>{
-        if (error){
-            return console.log('Unable to find user')
+    db.collection('users').updateOne({
+        _id: new ObjectID("60c20221eaae2e6f9cff9505")
+    }, {
+        $set: {
+            name: 'Mike'
         }
-
-        console.log(user)
+    }).then((result) => {
+        console.log(result)
+    }).catch((error) => {
+        console.log(error)
     })
 
-    db.collection('users').find({ age: 27} ).toArray((error, users) => {
-        console.log(users)
-    })
 
-    db.collection('users').find({ age: 27} ).count((error, count) => {
-        console.log(count)
-    })
-
-    // db.collection('tasks').insertMany([
-    //     {
-    //         description: 'Clean the house',
-    //         completed: true
-    //     },
-    //     {
-    //         description: 'Take out the Garbage',
-    //         completed: false
-    //     },
-    //     {
-    //         description: 'Do Udemy Course',
-    //         completed: false
-    //     }
-    // ], (error, result)=>{
-    //     if (error){
-    //         return console.log("Unable to insert tasks!")
-    //     }
-    //     console.log(result.ops)
-    // })
-   
-    db.collection('tasks').findOne({ _id: new ObjectID("60c2070098059d82442f6f06")}, (error, task) => {
-        if (error){
-            return console.log('Unable to find object')
-        }
-
-        console.log(task)
-    })
-
-    db.collection('tasks').find ({ completed: false }).toArray((error, tasks) => {
-        console.log(tasks)
-    })
+    
 })
