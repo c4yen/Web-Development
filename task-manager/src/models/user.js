@@ -75,7 +75,7 @@ userSchema.methods.toJSON = function (){
 
 userSchema.methods.generateAuthToken = async function () {
     const user = this
-    const token = jwt.sign( { _id: user._id.toString() }, 'learningnodejs')
+    const token = jwt.sign( { _id: user._id.toString() }, process.env.JWT_SECRET)
 
     user.tokens = user.tokens.concat({ token })
     await user.save()
@@ -111,7 +111,7 @@ userSchema.pre('save', async function(next){
 // Delete user tasks when user is removed
 userSchema.pre('remove', async function(next){
     const user = this
-    awaitTask.deleteMany({ owner: user._id })
+    await Task.deleteMany({ owner: user._id })
     next()
 })
 
