@@ -2,6 +2,10 @@ const path = require('path')
 const http = require('http')
 const express = require('express')
 const socketio = require('socket.io')
+const Filter = require('bad-words')
+const {generateMessage, generateLocationMessage} = require('./utils/messages')
+const { addUser, removeUser, getUser, getUsersInRoom } = require('./utils/users')
+const { callbackify } = require('util')
 
 const app = express()
 const server = http.createServer(app)
@@ -16,27 +20,44 @@ app.use(express.static(publicDirectoryPath))
 io.on('connection', (socket) => {
     console.log('New WebSocket connection')
 
-    socket.emit('message', 'Welcome!')
-    socket.broadcast.emit('message', 'A new user has joined')
+    socket.on('join', ({username, room}, call) => {
+        const {error, user} = addUser({ id: socket.id, username, room })
 
-    socket.on('sendMessage', (message) => {
-        io.emit('message', message)
+        if (error){
+            return call(error)  
+        }
+
+        socket.join(user.room)
+
+        socket.emit('message', generateMessage('Admin', 'Welcome!'))
+        socket.broadcast.to(user.room).emit('message', generateMessage('Admin', `${user.username} has joined`))
+
+        call()
+    })
+
+    socket.on('sendMessage', (message, call) => {
+        const user = getUser(socket.id)
+        const filter = new Filter()
+
+        io.to(user.room).emit('message', generateMessage(user.username, filter.clean(message)))
+        call()
     })
 
     socket.on('disconnect', () => {
-        io.emit('message', 'A user has left!')
+        const user = removeUser(socket.id)
+
+        if (user) {
+            io.to(user.room).emit('message', generateMessage('Admin', `${user.username} has left!`))
+        }
     })
 
-    socket.on('sendLocation', (coords) => {
-        io.emit('message', `https://google.com/maps?q=${coords.latitude},${coords.longitude}`)
+    socket.on('sendLocation', (coords, call) => {
+        const user = getUser(socket.id)
+        io.to(user.room).emit('locationMessage', generateLocationMessage(user.username, `https://google.com/maps?q=${coords.latitude},${coords.longitude}`))
+        call()
     })
 
-    // socket.emit('countUpdated', count)
-    // socket.on('increment', () => {
-    //     count++
-    //     //socket.emit('countUpdated', count)
-    //     io.emit('countUpdated', count)
-    // })
+
 })
 
 server.listen(port, ()=> {
