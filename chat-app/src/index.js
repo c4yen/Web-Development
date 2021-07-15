@@ -43,7 +43,7 @@ io.on('connection', (socket) => {
         const user = getUser(socket.id)
         const filter = new Filter()
 
-        io.to(user.room).emit('message', generateMessage(user.username, filter.clean(message)))
+        io.to(user.room).emit('message', generateMessage(user.username, message))
         call()
     })
 
